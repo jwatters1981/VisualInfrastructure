@@ -13,7 +13,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/env")
-@CrossOrigin(origins = "http://localhost:8000", maxAge = 3600)
+@CrossOrigin(maxAge = 3600)
 public class EnvironmentController {
 
     @Autowired

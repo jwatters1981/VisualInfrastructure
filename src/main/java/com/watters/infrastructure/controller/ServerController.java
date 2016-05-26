@@ -1,19 +1,22 @@
 package com.watters.infrastructure.controller;
 
+import com.google.common.collect.Lists;
 import com.watters.infrastructure.model.Server;
 import com.watters.infrastructure.service.DatabaseService;
 import com.watters.infrastructure.service.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by johnwatters on 25/05/2016.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:8000", maxAge = 3600)
-@RequestMapping(value = "/server")
+@CrossOrigin(maxAge = 3600)
+@RequestMapping(value = "/servers")
 public class ServerController {
 
     @Autowired
@@ -22,19 +25,29 @@ public class ServerController {
     @Autowired
     private DatabaseService databaseService;
 
-    @RequestMapping("/list/{ENV_ID}/{TYPE}")
-    public @ResponseBody Iterable<Server> list(@PathVariable("ENV_ID") Long envId, @PathVariable( value = "TYPE") String type)
+    @RequestMapping("/{ENV_ID}/DBServer")
+    public @ResponseBody List<ServerDTO> list(@PathVariable("ENV_ID") Long envId, @PathVariable( value = "TYPE") String type)
     {
-        if(type.equalsIgnoreCase("db"))
-        {
-            return databaseService.getDatabasesInEnvironment(envId);
-        }
-        return serverService.getAllServersForEnvironment(envId);
+        List<ServerDTO> serverDTOs = new ArrayList<ServerDTO>();
+
+            List<Server> servers = Lists.newArrayList(databaseService.getDatabasesInEnvironment(envId));
+            for (Server server: servers) {
+                serverDTOs.add(new ServerDTO(server));
+            }
+            return serverDTOs;
     }
 
-    @RequestMapping("/list/{ENV_ID}")
-    public @ResponseBody Iterable<Server> list(@PathVariable("ENV_ID") Long envId)
+
+    @RequestMapping("/{ENV_ID}")
+    public @ResponseBody List<ServerDTO> list(@PathVariable("ENV_ID") Long envId)
     {
-        return serverService.getAllServersForEnvironment(envId);
+        List<Server> servers = Lists.newArrayList(serverService.getAllServersForEnvironment(envId));
+        List<ServerDTO> serverDTOs = new ArrayList<ServerDTO>();
+        for (Server server: servers) {
+            serverDTOs.add(new ServerDTO(server));
+        }
+        return serverDTOs;
     }
+
+
 }

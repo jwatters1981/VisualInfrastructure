@@ -20,8 +20,13 @@ public class Server {
     @Column(name = "IP_ADDRESS")
     private String ipAddress;
 
-    @Column(name = "VERSION_ID")
+    @ManyToOne
+    @JoinColumn(name = "VERSION_ID")
     private Version version;
+
+    @ManyToOne
+    @JoinColumn(name = "OS_SYS_ID")
+    private OperatingSystem operatingSystem;
 
     @ManyToOne
     @JoinColumn(name = "ENVIRONMENT_ID")
@@ -70,4 +75,11 @@ public class Server {
     }
 
 
+    public OperatingSystem getOperatingSystem() {
+        return operatingSystem;
+    }
+
+    public void setOperatingSystem(OperatingSystem operatingSystem) {
+        this.operatingSystem = operatingSystem;
+    }
 }

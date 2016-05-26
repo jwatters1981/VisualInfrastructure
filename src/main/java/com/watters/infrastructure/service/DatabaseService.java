@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Iterator;
+
 /**
  * Created by johnwatters on 06/05/2016.
  */
@@ -56,4 +58,8 @@ public class DatabaseService {
     public Iterable<Server> getDatabasesInEnvironment(Long envId) {
         return databaseServerRepository.findByEnvironmentId(envId);
     }
+    public Iterable<Database> getDatabaseByServer(Long dbId) {
+        return databaseRepository.findByDatabaseServerId(dbId);
+    }
+
 }
